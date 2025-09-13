@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Server;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Server\ServerBulkActionRequest;
 use App\Http\Requests\V1\Server\ServerIndexRequest;
 use App\Http\Requests\V1\Server\ServerStoreRequest;
 use App\Http\Requests\V1\Server\ServerUpdateRequest;
@@ -104,6 +105,31 @@ class ServerController extends Controller
 
         } catch (ModelNotFoundException) {
             return $this->errorResponse('Server not found.', Response::HTTP_NOT_FOUND);
+
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function bulkAction(ServerBulkActionRequest $request)
+    {
+        try {
+            $action = $request->input('action');
+            $ids = $request->input('ids', []);
+
+            $servers = Server::whereIn('id', $ids)->get();
+
+            match ($action) {
+                'delete' => $servers->each->delete(),
+                'activate' => $servers->each->update(['status' => 'active']),
+                'deactivate' => $servers->each->update(['status' => 'inactive']),
+                default => $this->errorResponse('Invalid bulk action.', Response::HTTP_BAD_REQUEST),
+            };
+
+            return $this->successResponse(
+                ServerResource::collection($servers->fresh()),
+                "Bulk action '{$action}' applied successfully."
+            );
 
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage());

@@ -10,6 +10,8 @@ Route::group([
 
     Route::post('/', [ServerController::class, 'store']);
 
+    Route::post('/bulk-action', [ServerController::class, 'bulkAction']);
+
     Route::get('{id}', [ServerController::class, 'show'])
         ->where('id', '[0-9]+');
 
