@@ -6,7 +6,7 @@
 
 ## Setup Instructions
 
-This project uses **Laravel** for the backend and **MySQL** as the database, containerized with **Docker** for easy setup and reproducibility.
+This project uses **Laravel** for the backend and **MySQL** as the database, containerized with **Docker** for easy setup and reproducibility.  
 
 ### Prerequisites
 
@@ -54,6 +54,11 @@ This project uses **Laravel** for the backend and **MySQL** as the database, con
       **Email**: `test@example.com`
 
       **Password**: `password`
+
+7. **Run test cases**:
+   ```bash
+   php artisan test
+   ```
 
 The API is ready for testing. Import the Postman collection: [Download Postman Collection](https://drive.google.com/file/d/1jH4EZVjzQxk1djyW0gbqN0oM4y3AxaO6/view?usp=sharing).
 
