@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Api\V1\Server\ServerController;
 
-Route::group(['prefix' => 'servers'], function () {
+Route::group([
+    'prefix' => 'servers',
+    'middleware' => ['auth:sanctum', 'throttle:60,1'],
+], function () {
     Route::get('/', [ServerController::class, 'index']);
 
     Route::post('/', [ServerController::class, 'store']);
